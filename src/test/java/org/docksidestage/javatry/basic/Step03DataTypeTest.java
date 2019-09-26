@@ -54,7 +54,7 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4
     }
 
     // ===================================================================================
@@ -70,19 +70,21 @@ public class Step03DataTypeTest extends PlainTestCase {
         double amba = 2.3d;
         char miraco = 'a';
         boolean dohotel = miraco == 'a';
-        if (dohotel && dstore >= piari) {
+        if (dohotel && dstore >= piari) { // this is difficult. I think 2^31 can be converted to float perfectly.
             bonvo = sea;
             land = (short) bonvo;
             bonvo = piari;
-            sea = (byte) land;
+            sea = (byte) land; // I think 0111111111111111 -> 11111111 so this is maybe -1.
+            // add log to confirm above.
+            log(sea);
             if (amba == 2.3D) {
-                sea = (byte) amba;
+                sea = (byte) amba; // maybe 2
             }
         }
-        if (dstore > piari) {
+        if (dstore > piari) { // oh no.
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0
     }
 
     // ===================================================================================
@@ -92,7 +94,7 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hanger
     }
 
     private static class St3ImmutableStage {
