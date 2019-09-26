@@ -96,6 +96,9 @@ public class Step03DataTypeTest extends PlainTestCase {
         // I think 2^31 can be converted to float perfectly. but 2147483647.1f can not be presented perfectly in float...
         // because mantissa on single precision floating-point number has only 23bit...
         // so I think below log prints 2147483647.0
+        // this result is 2.14748365E9 actually.
+        // see https://docs.oracle.com/javase/jp/8/docs/api/java/lang/Float.html#toString-float-https://docs.oracle.com/javase/jp/8/docs/api/java/lang/Float.html#toString-float-
+        
         log(dstore);
     }
 
