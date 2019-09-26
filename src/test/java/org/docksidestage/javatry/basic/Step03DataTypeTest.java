@@ -76,6 +76,13 @@ public class Step03DataTypeTest extends PlainTestCase {
             bonvo = piari;
             sea = (byte) land; // I think 0111111111111111 -> 11111111 so this is maybe -1.
             // add log to confirm above.
+            // this is 127 actually...
+            // In language C, below code returns -1...
+            // short sea = 32767; // max
+            // int  land = 2147483647; // max
+            // sea = (short)land;
+            // return sea;
+            // I think truncating bit length is started from bottom bit in java, in language c it is from start bit oppositely.
             log(sea);
             if (amba == 2.3D) {
                 sea = (byte) amba; // maybe 2
@@ -84,7 +91,12 @@ public class Step03DataTypeTest extends PlainTestCase {
         if (dstore > piari) { // oh no.
             sea = 0;
         }
-        log(sea); // your answer? => 0
+        log(sea); // your answer? => 0 -> 2
+
+        // I think 2^31 can be converted to float perfectly. but 2147483647.1f can not be presented perfectly in float...
+        // because mantissa on single precision floating-point number has only 23bit...
+        // so I think below log prints 2147483647.0
+        log(dstore);
     }
 
     // ===================================================================================
