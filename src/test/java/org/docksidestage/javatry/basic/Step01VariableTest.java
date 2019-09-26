@@ -47,7 +47,7 @@ public class Step01VariableTest extends PlainTestCase {
         String piari = null;
         String dstore = "mai";
         sea = sea + land + piari + ":" + dstore;
-        log(sea); // your answer? => "mystic 8:mai"
+        log(sea); // your answer? => "mystic8null:mai" // ugly null...
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -111,7 +111,7 @@ public class Step01VariableTest extends PlainTestCase {
         helpInstanceVariableViaMethod(instanceMagiclamp);
         // bigband|1||magician
         String sea = instanceBroadway + "|" + instanceDockside + "|" + instanceHangar + "|" + instanceMagiclamp;
-        log(sea); // your answer? => bigband|1||magician
+        log(sea); // your answer? => bigband|1|null|magician // ugly null
     }
 
     private void helpInstanceVariableViaMethod(String instanceMagiclamp) {
