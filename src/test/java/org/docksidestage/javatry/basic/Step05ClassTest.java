@@ -61,6 +61,7 @@ public class Step05ClassTest extends PlainTestCase {
     public void test_class_howToUse_wrongQuantity() {
         Integer sea = doTest_class_ticket_wrongQuantity();
         log(sea); // your answer? => 9
+        // -> 10
     }
 
     private Integer doTest_class_ticket_wrongQuantity() {
