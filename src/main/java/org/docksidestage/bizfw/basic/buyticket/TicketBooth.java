@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import org.docksidestage.javatry.basic.TicketBuyResult;
+
 /**
  * @author jflute
  */
@@ -56,8 +58,9 @@ public class TicketBooth {
      * @param handedMoney money you handed.
      * @return change(rest handed money).
      */
-    public int buyTwoDayPassport(int handedMoney) {
-        return buyPassport(handedMoney, TWO_DAY_PRICE);
+    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
+        int change = buyPassport(handedMoney, TWO_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE), change);
     }
 
     private int buyPassport(int handedMoney, int price) {
