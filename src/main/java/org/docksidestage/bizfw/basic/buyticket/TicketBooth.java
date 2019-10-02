@@ -24,11 +24,16 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
+    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/1
+    // when 2019/09/30.
+    // after 10/01 it is increased to 13400 because of consumption tax increased.
+    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // this quantity is common on all kinds of tickets.
+    // because this means physical number of paper used to ticket. (maybe...)
     private int quantity = MAX_QUANTITY;
     private Integer salesProceeds;
 
@@ -55,6 +60,28 @@ public class TicketBooth {
         } else {
             salesProceeds = ONE_DAY_PRICE;
         }
+    }
+
+    /**
+     * buy two day passport.
+     * @param handedMoney money you handed.
+     * @return change(rest handed money).
+     */
+    public int buyTwoDayPassport(int handedMoney) {
+        if (quantity <= 0) {
+            throw new TicketSoldOutException("Sold out");
+        }
+        if (handedMoney < TWO_DAY_PRICE) {
+            throw new TicketShortMoneyException("Short money: " + handedMoney);
+        }
+        // decrease quantity after confirmation handedMoney is larger than price.
+        --quantity;
+        if (salesProceeds != null) {
+            salesProceeds = salesProceeds + TWO_DAY_PRICE;
+        } else {
+            salesProceeds = TWO_DAY_PRICE;
+        }
+        return handedMoney - TWO_DAY_PRICE;
     }
 
     public static class TicketSoldOutException extends RuntimeException {
