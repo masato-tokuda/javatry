@@ -51,9 +51,9 @@ public class TicketBooth {
         // decrease quantity after confirmation handedMoney is larger than price.
         --quantity;
         if (salesProceeds != null) {
-            salesProceeds = salesProceeds + handedMoney;
+            salesProceeds = salesProceeds + ONE_DAY_PRICE;
         } else {
-            salesProceeds = handedMoney;
+            salesProceeds = ONE_DAY_PRICE;
         }
     }
 
