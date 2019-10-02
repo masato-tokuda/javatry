@@ -54,7 +54,7 @@ public class Step03DataTypeTest extends PlainTestCase {
             BigDecimal addedDecimal = amba.add(new BigDecimal(land));
             sea = String.valueOf(addedDecimal);
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 18.4
     }
 
     // ===================================================================================
@@ -70,19 +70,36 @@ public class Step03DataTypeTest extends PlainTestCase {
         double amba = 2.3d;
         char miraco = 'a';
         boolean dohotel = miraco == 'a';
-        if (dohotel && dstore >= piari) {
+        if (dohotel && dstore >= piari) { // this is difficult. I think 2^31 can be converted to float perfectly.
             bonvo = sea;
             land = (short) bonvo;
             bonvo = piari;
-            sea = (byte) land;
+            sea = (byte) land; // I think 0111111111111111 -> 11111111 so this is maybe -1.
+            // add log to confirm above.
+            // this is 127 actually...
+            // In language C, below code returns -1...
+            // short sea = 32767; // max
+            // int  land = 2147483647; // max
+            // sea = (short)land;
+            // return sea;
+            // I think truncating bit length is started from bottom bit in java, in language c it is from start bit oppositely.
+            log(sea);
             if (amba == 2.3D) {
-                sea = (byte) amba;
+                sea = (byte) amba; // maybe 2
             }
         }
-        if (dstore > piari) {
+        if (dstore > piari) { // oh no.
             sea = 0;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 0 -> 2
+
+        // I think 2^31 can be converted to float perfectly. but 2147483647.1f can not be presented perfectly in float...
+        // because mantissa on single precision floating-point number has only 23bit...
+        // so I think below log prints 2147483647.0
+        // this result is 2.14748365E9 actually.
+        // see https://docs.oracle.com/javase/jp/8/docs/api/java/lang/Float.html#toString-float-https://docs.oracle.com/javase/jp/8/docs/api/java/lang/Float.html#toString-float-
+        
+        log(dstore);
     }
 
     // ===================================================================================
@@ -92,7 +109,7 @@ public class Step03DataTypeTest extends PlainTestCase {
     public void test_datatype_object() {
         St3ImmutableStage stage = new St3ImmutableStage("hangar");
         String sea = stage.getStageName();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hanger
     }
 
     private static class St3ImmutableStage {
