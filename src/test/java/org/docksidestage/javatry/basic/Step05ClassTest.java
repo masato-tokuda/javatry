@@ -164,6 +164,11 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_type() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 20000;
+        TicketBuyResult ticketBuyResult = booth.buyTwoDayPassport(handedMoney);
+        // This should be TwoDay
+        log(ticketBuyResult.getTicket().getTicketType());
     }
 
     // ===================================================================================
