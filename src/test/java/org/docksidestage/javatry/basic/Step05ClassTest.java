@@ -192,6 +192,13 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_useInterface() {
         // your confirmation code here
+        TicketBooth booth = new TicketBooth();
+        int handedMoney = 20000;
+        Ticket ticket = booth.buyOneDayPassport(handedMoney);
+        log(ticket.isAlreadyIn()); // false;
+        ticket.doInPark();
+        log(ticket.isAlreadyIn()); // true;
+        
     }
 
     /**

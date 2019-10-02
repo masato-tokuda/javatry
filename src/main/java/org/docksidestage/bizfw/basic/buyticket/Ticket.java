@@ -18,51 +18,13 @@ package org.docksidestage.bizfw.basic.buyticket;
 /**
  * @author jflute
  */
-public class Ticket {
+public interface Ticket {
 
-    // ===================================================================================
-    //                                                                           Attribute
-    //                                                                           =========
-    private final int displayPrice;
-    private boolean alreadyIn;
-    private TicketType ticketType;
+    int getDisplayPrice();
 
-    // ===================================================================================
-    //                                                                         Constructor
-    //                                                                         ===========
-    // this is for step 6 tests.
-    // this should be removed when this is unnecessary.
-    public Ticket(int displayPrice) {
-        this.displayPrice = displayPrice;
-    }
+    void doInPark();
 
-    public Ticket(int displayPrice, TicketType ticketType) {
-        this.displayPrice = displayPrice;
-        this.ticketType = ticketType;
-    }
+    TicketType getTicketType();
 
-    // ===================================================================================
-    //                                                                             In Park
-    //                                                                             =======
-    public void doInPark() {
-        if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
-        }
-        alreadyIn = true;
-    }
-
-    // ===================================================================================
-    //                                                                            Accessor
-    //                                                                            ========
-    public int getDisplayPrice() {
-        return displayPrice;
-    }
-
-    public boolean isAlreadyIn() {
-        return alreadyIn;
-    }
-
-    public TicketType getTicketType() {
-        return ticketType;
-    }
+    boolean isAlreadyIn();
 }

@@ -50,7 +50,7 @@ public class TicketBooth {
     //                                                                          ==========
     public Ticket buyOneDayPassport(int handedMoney) {
         buyPassport(handedMoney, ONE_DAY_PRICE);
-        return new Ticket(ONE_DAY_PRICE, TicketType.OneDay);
+        return new OneDayTicket(ONE_DAY_PRICE);
     }
 
     /**
@@ -60,7 +60,7 @@ public class TicketBooth {
      */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
         int change = buyPassport(handedMoney, TWO_DAY_PRICE);
-        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, TicketType.TwoDay), change);
+        return new TicketBuyResult(new PluralDayTicket(TWO_DAY_PRICE, 2, TicketType.TwoDay), change);
     }
 
     private int buyPassport(int handedMoney, int price) {
