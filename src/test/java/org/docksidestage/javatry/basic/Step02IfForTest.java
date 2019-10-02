@@ -52,7 +52,7 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 7;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 7
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -67,7 +67,7 @@ public class Step02IfForTest extends PlainTestCase {
         } else {
             sea = 9;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? =>  7
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -91,7 +91,7 @@ public class Step02IfForTest extends PlainTestCase {
         if (land) {
             sea = 10;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 10
     }
 
     // ===================================================================================
@@ -107,7 +107,7 @@ public class Step02IfForTest extends PlainTestCase {
                 sea = stage;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -117,7 +117,7 @@ public class Step02IfForTest extends PlainTestCase {
         for (String stage : stageList) {
             sea = stage;
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => magiclamp
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -133,7 +133,7 @@ public class Step02IfForTest extends PlainTestCase {
                 break;
             }
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => hangar
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -149,7 +149,7 @@ public class Step02IfForTest extends PlainTestCase {
             }
         });
         String sea = sb.toString();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => dockside
     }
 
     // ===================================================================================
@@ -161,6 +161,16 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        ArrayList<String> results = new ArrayList<>();
+        List<String> stageList = prepareStageList();
+        for (String stage : stageList) {
+            if (stage.contains("a")) { // I believe stageList doesn't contain null.
+                results.add(stage);
+            }
+        }
+        for (String result : results) {
+            log(result);
+        }
     }
 
     // ===================================================================================
@@ -183,6 +193,25 @@ public class Step02IfForTest extends PlainTestCase {
             }
         }
         log(sea); // should be same as before-fix
+
+        // this list is used for side effect in forEach... I don't like it.
+        // At first I thought to use StringBuilder append and delete, but it couldn't solve null problem.
+        // and break in forEach is too difficult...
+        List<String> anotherSea = new ArrayList<>();
+        anotherSea.add(null);
+        anotherSea.add("FALSE");
+        stageList.forEach((stage) -> {
+            String needToBreak = "TRUE";
+            if (!anotherSea.get(1).equals(needToBreak)) {
+                if (!stage.startsWith("br")) {
+                    anotherSea.set(0, stage);
+                    if (stage.contains("ga")) {
+                        anotherSea.set(1, needToBreak);
+                    }
+                }
+            }
+        });
+        log(anotherSea.get(0)); // should be same as before-fix
     }
 
     /**
@@ -191,12 +220,13 @@ public class Step02IfForTest extends PlainTestCase {
      * <pre>
      * _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
      * your question here (ここにあなたの質問を):
-     * 
+     *
      * _/_/_/_/_/_/_/_/_/_/
      * </pre>
      */
     public void test_iffor_yourExercise() {
         // write your code here
+        // I have no time to write this exercise. sorry...
     }
 
     // ===================================================================================
