@@ -46,8 +46,9 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
-    public int buyOneDayPassport(int handedMoney) {
-        return buyPassport(handedMoney, ONE_DAY_PRICE);
+    public Ticket buyOneDayPassport(int handedMoney) {
+        buyPassport(handedMoney, ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE);
     }
 
     /**
