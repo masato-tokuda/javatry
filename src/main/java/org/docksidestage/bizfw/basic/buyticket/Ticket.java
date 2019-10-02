@@ -25,12 +25,20 @@ public class Ticket {
     //                                                                           =========
     private final int displayPrice;
     private boolean alreadyIn;
+    private TicketType ticketType;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
+    // this is for step 6 tests.
+    // this should be removed when this is unnecessary.
     public Ticket(int displayPrice) {
         this.displayPrice = displayPrice;
+    }
+
+    public Ticket(int displayPrice, TicketType ticketType) {
+        this.displayPrice = displayPrice;
+        this.ticketType = ticketType;
     }
 
     // ===================================================================================
@@ -52,5 +60,9 @@ public class Ticket {
 
     public boolean isAlreadyIn() {
         return alreadyIn;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
     }
 }

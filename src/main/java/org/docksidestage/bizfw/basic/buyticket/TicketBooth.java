@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import org.docksidestage.javatry.basic.TicketBuyResult;
+
 /**
  * @author jflute
  */
@@ -24,11 +26,16 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
+    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/1
+    // when 2019/09/30.
+    // after 10/01 it is increased to 13400 because of consumption tax increased.
+    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // this quantity is common on all kinds of tickets.
+    // because this means physical number of paper used to ticket. (maybe...)
     private int quantity = MAX_QUANTITY;
     private Integer salesProceeds;
 
@@ -41,19 +48,36 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
-    public void buyOneDayPassport(int handedMoney) {
+    public Ticket buyOneDayPassport(int handedMoney) {
+        buyPassport(handedMoney, ONE_DAY_PRICE);
+        return new Ticket(ONE_DAY_PRICE, TicketType.OneDay);
+    }
+
+    /**
+     * buy two day passport.
+     * @param handedMoney money you handed.
+     * @return change(rest handed money).
+     */
+    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
+        int change = buyPassport(handedMoney, TWO_DAY_PRICE);
+        return new TicketBuyResult(new Ticket(TWO_DAY_PRICE, TicketType.TwoDay), change);
+    }
+
+    private int buyPassport(int handedMoney, int price) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
-        --quantity;
-        if (handedMoney < ONE_DAY_PRICE) {
+        if (handedMoney < price) {
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
+        // decrease quantity after confirmation handedMoney is larger than price.
+        --quantity;
         if (salesProceeds != null) {
-            salesProceeds = salesProceeds + handedMoney;
+            salesProceeds = salesProceeds + price;
         } else {
-            salesProceeds = handedMoney;
+            salesProceeds = price;
         }
+        return handedMoney - price;
     }
 
     public static class TicketSoldOutException extends RuntimeException {
