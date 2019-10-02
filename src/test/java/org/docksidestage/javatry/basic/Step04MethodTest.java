@@ -35,7 +35,7 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_call_basic() {
         String sea = supplySomething();
-        log(sea); // your answer? =>
+        log(sea); // your answer? => over
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -43,7 +43,7 @@ public class Step04MethodTest extends PlainTestCase {
         String sea = functionSomething("mystic");
         consumeSomething(supplySomething());
         runnableSomething();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => "mysmys"
     }
 
     private String functionSomething(String name) {
@@ -73,10 +73,12 @@ public class Step04MethodTest extends PlainTestCase {
         int sea = 904;
         boolean land = false;
         helloMutable(sea - 4, land, mutable);
+        // sea is 904, land not changed, mutable is set to mystic
         if (!land) {
+            // 904 + 6
             sea = sea + mutable.getStageName().length();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 910
     }
 
     private int helloMutable(int sea, Boolean land, St4MutableStage piari) {
@@ -109,13 +111,16 @@ public class Step04MethodTest extends PlainTestCase {
     public void test_method_instanceVariable() {
         hasAnnualPassport = true;
         int sea = inParkCount;
+        // sea is 0 now.
         offAnnualPassport(hasAnnualPassport);
+        // hasAnnualPassport is still true.
         for (int i = 0; i < 100; i++) {
             goToPark();
         }
+        // inParkCount = 100;
         ++sea;
         sea = inParkCount;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 100
     }
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
@@ -152,12 +157,34 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_making() {
         // comment out after making these methods
-        //String replaced = replaceCtoB(replaceAtoB("ABC"));
-        //String sea = addPrefix("broadway", replaced);
-        //if (isAvailableLogging()) {
-        //    showSea(sea);
-        //}
+        String replaced = replaceCtoB(replaceAtoB("ABC"));
+        String sea = addPrefix("broadway", replaced);
+        if (isAvailableLogging()) {
+            showSea(sea);
+            // maybe this prints broadway:BBB
+        }
     }
 
     // write methods here
+    private String replaceAtoB(String arg) {
+        return arg.replace("A", "B");
+    }
+
+    private String replaceCtoB(String arg) {
+        return arg.replace("C", "B");
+    }
+
+    private String addPrefix(String prefix, String target) {
+        return prefix + ":" + target;
+    }
+
+    private boolean availableLogging = true;
+
+    private boolean isAvailableLogging() {
+        return availableLogging;
+    }
+
+    private void showSea(String sea) {
+        log(sea);
+    }
 }
