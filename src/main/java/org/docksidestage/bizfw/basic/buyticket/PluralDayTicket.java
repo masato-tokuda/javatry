@@ -26,6 +26,7 @@ public class PluralDayTicket implements Ticket {
         if (usableCount <= inParkCount) {
             throw new IllegalStateException("This ticket is used over usable count. Can not use to park in.");
         }
+        ++inParkCount;
     }
 
     @Override

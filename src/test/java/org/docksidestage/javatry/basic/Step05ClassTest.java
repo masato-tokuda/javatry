@@ -194,11 +194,34 @@ public class Step05ClassTest extends PlainTestCase {
         // your confirmation code here
         TicketBooth booth = new TicketBooth();
         int handedMoney = 20000;
+
+        // test for one day
         Ticket ticket = booth.buyOneDayPassport(handedMoney);
         log(ticket.isAlreadyIn()); // false;
         ticket.doInPark();
         log(ticket.isAlreadyIn()); // true;
-        
+        try {
+            ticket.doInPark();
+            fail("test failed.");
+        } catch (Exception e) {
+            log("should throw exception.", e);
+        }
+
+        // test for two day
+        TicketBuyResult twoDayTicketResult = booth.buyTwoDayPassport(handedMoney);
+        Ticket twoDayTicket = twoDayTicketResult.getTicket();
+
+        log(twoDayTicket.isAlreadyIn()); // false;
+        twoDayTicket.doInPark();
+        log(twoDayTicket.isAlreadyIn()); // expected true, but it's a little weird.
+        twoDayTicket.doInPark();
+        log("success to go in park twice by using two day ticket.");
+        try {
+            twoDayTicket.doInPark();
+            fail();
+        } catch (Exception e) {
+            log("should throw exception.", e);
+        }
     }
 
     /**
