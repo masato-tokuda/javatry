@@ -1,6 +1,8 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
-// TODO kata javadocをよろしくね by jflute (2019/10/03)
+/**
+ * @author katashin
+ */
 public class OneDayTicket implements Ticket {
 
     // ===================================================================================
