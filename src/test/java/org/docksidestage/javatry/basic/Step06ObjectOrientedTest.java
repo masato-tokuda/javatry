@@ -15,10 +15,7 @@
  */
 package org.docksidestage.javatry.basic;
 
-import org.docksidestage.bizfw.basic.buyticket.OneDayTicket;
-import org.docksidestage.bizfw.basic.buyticket.Ticket;
-import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
-import org.docksidestage.bizfw.basic.buyticket.TicketType;
+import org.docksidestage.bizfw.basic.buyticket.*;
 import org.docksidestage.bizfw.basic.objanimal.*;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
@@ -116,7 +113,7 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
         //
         // [ticket booth info]
         //
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(new LocalDateProvider());
 
         // *booth has these properties:
         //int oneDayPrice = 7400;
