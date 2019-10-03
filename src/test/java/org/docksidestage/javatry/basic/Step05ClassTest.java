@@ -230,6 +230,28 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder() {
         // your confirmation code here
+        final TicketBooth booth = new TicketBooth();
+        int handedMoney = 30000;
+
+        // test for four day.
+        final TicketBuyResult result = booth.buyFourDayPassword(handedMoney);
+        final Ticket ticket = result.getTicket();
+        log(ticket.getDisplayPrice()); // should be 22400
+        log(result.getChange() + ticket.getDisplayPrice()); // should be equal to handedMoney.
+
+        log(ticket.isAlreadyIn()); // should false.
+        ticket.doInPark();
+        log(ticket.isAlreadyIn()); // should true.
+        ticket.doInPark();
+        ticket.doInPark();
+        ticket.doInPark();
+        log("success go in park four times.");
+        try {
+            ticket.doInPark();
+            fail();
+        } catch (Exception e) {
+            log("should throw exception");
+        }
     }
 
     /**

@@ -30,7 +30,9 @@ public class TicketBooth {
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/1
     // when 2019/09/30.
     // after 10/01 it is increased to 13400 because of consumption tax increased.
+    // TODO katashin this price should be flexible.
     private static final int TWO_DAY_PRICE = 13200;
+    private static final int FOUR_DAY_PRICE = 22400;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -62,6 +64,17 @@ public class TicketBooth {
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
         int change = buyPassport(handedMoney, TWO_DAY_PRICE);
         return new TicketBuyResult(new PluralDayTicket(TWO_DAY_PRICE, 2, TicketType.TwoDay), change);
+    }
+
+    /**
+     * buy four day passport.
+     * @param handedMoney money you handed
+     * @return change
+     */
+    // TODO katashin need to refactor. buying method should be aggregated.
+    public TicketBuyResult buyFourDayPassword(int handedMoney) {
+        int change = buyPassport(handedMoney, FOUR_DAY_PRICE);
+        return new TicketBuyResult(new PluralDayTicket(FOUR_DAY_PRICE, 4, TicketType.FourDay), change);
     }
 
     private int buyPassport(int handedMoney, int price) {
