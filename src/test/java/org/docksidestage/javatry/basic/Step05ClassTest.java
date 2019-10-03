@@ -15,9 +15,13 @@
  */
 package org.docksidestage.javatry.basic;
 
+import java.time.LocalDate;
+
+import org.docksidestage.bizfw.basic.buyticket.LocalDateProvider;
 import org.docksidestage.bizfw.basic.buyticket.Ticket;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth;
 import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketShortMoneyException;
+import org.docksidestage.bizfw.basic.buyticket.TicketType;
 import org.docksidestage.unit.PlainTestCase;
 
 /**
@@ -25,9 +29,25 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author katashin
  */
 public class Step05ClassTest extends PlainTestCase {
+
+    private LocalDateProvider beforeTaxIncreaseDateProvider = new LocalDateProvider() {
+
+        @Override
+        public LocalDate now() {
+            return LocalDate.of(2019, 9, 30);
+        }
+    };
+
+    private LocalDateProvider afterTaxIncreaseDateProvider = new LocalDateProvider() {
+
+        @Override
+        public LocalDate now() {
+            return LocalDate.of(2019, 10, 1);
+        }
+    };
 
     // ===================================================================================
     //                                                                          How to Use
@@ -37,16 +57,16 @@ public class Step05ClassTest extends PlainTestCase {
      * (メソッド終了時の変数 sea の中身は？)
      */
     public void test_class_howToUse_basic() {
-        TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(7400);
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        booth.buyPassport(7400, TicketType.OneDay);
         int sea = booth.getQuantity();
         log(sea); // your answer? => 9
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_overpay() {
-        TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(10000);
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        booth.buyPassport(10000, TicketType.OneDay);
         Integer sea = booth.getSalesProceeds();
         log(sea); // your answer? => 10000
         // -> 7400
@@ -54,7 +74,7 @@ public class Step05ClassTest extends PlainTestCase {
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
     public void test_class_howToUse_nosales() {
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         Integer sea = booth.getSalesProceeds();
         log(sea); // your answer? => null
     }
@@ -67,10 +87,10 @@ public class Step05ClassTest extends PlainTestCase {
     }
 
     private Integer doTest_class_ticket_wrongQuantity() {
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         int handedMoney = 7399;
         try {
-            booth.buyOneDayPassport(handedMoney);
+            booth.buyPassport(handedMoney, TicketType.OneDay);
             fail("always exception but none");
         } catch (TicketShortMoneyException continued) {
             log("Failed to buy one-day passport: money=" + handedMoney, continued);
@@ -95,8 +115,8 @@ public class Step05ClassTest extends PlainTestCase {
      * (受け取ったお金の分だけ売上が増えていく問題をクラスを修正して解決しましょう (以前のエクササイズのanswerの修正を忘れずに))
      */
     public void test_class_letsFix_salesProceedsIncrease() {
-        TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(10000);
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        booth.buyPassport(10000, TicketType.OneDay);
         Integer sea = booth.getSalesProceeds();
         log(sea); // should be same as one-day price, visual check here
     }
@@ -107,9 +127,9 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_letsFix_makeMethod_twoday() {
         // comment out after making the method
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         int money = 14000;
-        int change = booth.buyTwoDayPassport(money).getChange();
+        int change = booth.buyPassport(money, TicketType.TwoDay).getChange();
         Integer sea = booth.getSalesProceeds() + change;
         log(sea); // should be same as money
 
@@ -122,8 +142,8 @@ public class Step05ClassTest extends PlainTestCase {
      * (OneDayとTwoDayで冗長なロジックがあったら、クラス内のprivateメソッドなどで再利用しましょう (修正前と修正後の実行結果を確認))
      */
     public void test_class_letsFix_refactor_recycle() {
-        TicketBooth booth = new TicketBooth();
-        booth.buyOneDayPassport(10000);
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        booth.buyPassport(10000, TicketType.OneDay);
         log(booth.getQuantity(), booth.getSalesProceeds()); // should be same as before-fix
     }
 
@@ -136,8 +156,8 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_ticket() {
         // comment out after modifying the method
-        TicketBooth booth = new TicketBooth();
-        Ticket oneDayPassport = booth.buyOneDayPassport(10000);
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        Ticket oneDayPassport = booth.buyPassport(10000, TicketType.OneDay).getTicket();
         log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
         log(oneDayPassport.isAlreadyIn()); // should be false
         oneDayPassport.doInPark();
@@ -150,9 +170,9 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_return_whole() {
         // comment out after modifying the method
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         int handedMoney = 20000;
-        TicketBuyResult twoDayPassportResult = booth.buyTwoDayPassport(handedMoney);
+        TicketBuyResult twoDayPassportResult = booth.buyPassport(handedMoney, TicketType.TwoDay);
         Ticket twoDayPassport = twoDayPassportResult.getTicket();
         int change = twoDayPassportResult.getChange();
         log(twoDayPassport.getDisplayPrice() + change); // should be same as money
@@ -164,9 +184,9 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_type() {
         // your confirmation code here
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         int handedMoney = 20000;
-        TicketBuyResult ticketBuyResult = booth.buyTwoDayPassport(handedMoney);
+        TicketBuyResult ticketBuyResult = booth.buyPassport(handedMoney, TicketType.TwoDay);
         // This should be TwoDay
         log(ticketBuyResult.getTicket().getTicketType());
     }
@@ -192,13 +212,36 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_useInterface() {
         // your confirmation code here
-        TicketBooth booth = new TicketBooth();
+        TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
         int handedMoney = 20000;
-        Ticket ticket = booth.buyOneDayPassport(handedMoney);
+
+        // test for one day
+        Ticket ticket = booth.buyPassport(handedMoney, TicketType.OneDay).getTicket();
         log(ticket.isAlreadyIn()); // false;
         ticket.doInPark();
         log(ticket.isAlreadyIn()); // true;
-        
+        try {
+            ticket.doInPark();
+            fail("test failed.");
+        } catch (Exception e) {
+            log("should throw exception.", e);
+        }
+
+        // test for two day
+        TicketBuyResult twoDayTicketResult = booth.buyPassport(handedMoney, TicketType.TwoDay);
+        Ticket twoDayTicket = twoDayTicketResult.getTicket();
+
+        log(twoDayTicket.isAlreadyIn()); // false;
+        twoDayTicket.doInPark();
+        log(twoDayTicket.isAlreadyIn()); // expected true, but it's a little weird.
+        twoDayTicket.doInPark();
+        log("success to go in park twice by using two day ticket.");
+        try {
+            twoDayTicket.doInPark();
+            fail();
+        } catch (Exception e) {
+            log("should throw exception.", e);
+        }
     }
 
     /**
@@ -207,6 +250,28 @@ public class Step05ClassTest extends PlainTestCase {
      */
     public void test_class_moreFix_wonder() {
         // your confirmation code here
+        final TicketBooth booth = new TicketBooth(beforeTaxIncreaseDateProvider);
+        int handedMoney = 30000;
+
+        // test for four day.
+        final TicketBuyResult result = booth.buyPassport(handedMoney, TicketType.FourDay);
+        final Ticket ticket = result.getTicket();
+        log(ticket.getDisplayPrice()); // should be 22400
+        log(result.getChange() + ticket.getDisplayPrice()); // should be equal to handedMoney.
+
+        log(ticket.isAlreadyIn()); // should false.
+        ticket.doInPark();
+        log(ticket.isAlreadyIn()); // should true.
+        ticket.doInPark();
+        ticket.doInPark();
+        ticket.doInPark();
+        log("success go in park four times.");
+        try {
+            ticket.doInPark();
+            fail();
+        } catch (Exception e) {
+            log("should throw exception");
+        }
     }
 
     /**
@@ -214,6 +279,46 @@ public class Step05ClassTest extends PlainTestCase {
      * (その他、気になるところがあったらリファクタリングしてみましょう (例えば、バランスの良いメソッド名や変数名になっていますか？))
      */
     public void test_class_moreFix_yourRefactoring() {
-        // write confirmation code here
+        final TicketBooth ticketBoothBeforeTaxIncrease = new TicketBooth(beforeTaxIncreaseDateProvider);
+        int handyMoney = 30000;
+
+        // TODO these tests are parameterized test, so you can refactor test to read easily.
+
+        // one day
+        final TicketBuyResult oneDayResult = ticketBoothBeforeTaxIncrease.buyPassport(handyMoney, TicketType.OneDay);
+        final Ticket oneDayTicket = oneDayResult.getTicket();
+        log(oneDayTicket.getDisplayPrice()); // should one day ticket price before tax increase;
+        log(oneDayResult.getChange() + oneDayTicket.getDisplayPrice()); // should be equal to handy money.
+
+        // two day
+        final TicketBuyResult twoDayResult = ticketBoothBeforeTaxIncrease.buyPassport(handyMoney, TicketType.TwoDay);
+        final Ticket twoDayTicket = twoDayResult.getTicket();
+        log(twoDayTicket.getDisplayPrice()); // should two day ticket price before tax increase;
+        log(twoDayResult.getChange() + twoDayTicket.getDisplayPrice()); // should be equal to handy money.
+
+        // four day
+        final TicketBuyResult fourDayResult = ticketBoothBeforeTaxIncrease.buyPassport(handyMoney, TicketType.FourDay);
+        final Ticket fourDayTicket = fourDayResult.getTicket();
+        log(fourDayTicket.getDisplayPrice()); // should four day ticket price before tax increase;
+        log(fourDayResult.getChange() + fourDayTicket.getDisplayPrice()); // should be equal to handy money.
+
+        final TicketBooth ticketBoothAfterTaxIncrease = new TicketBooth(afterTaxIncreaseDateProvider);
+
+        final TicketBuyResult oneDayResultAfter = ticketBoothAfterTaxIncrease.buyPassport(handyMoney, TicketType.OneDay);
+        final Ticket oneDayTicketAfter = oneDayResultAfter.getTicket();
+        log(oneDayTicketAfter.getDisplayPrice()); // should one day ticket price after tax increase;
+        log(oneDayResultAfter.getChange() + oneDayTicketAfter.getDisplayPrice()); // should be equal to handy money.
+
+        // two day
+        final TicketBuyResult twoDayResultAfter = ticketBoothAfterTaxIncrease.buyPassport(handyMoney, TicketType.TwoDay);
+        final Ticket twoDayTicketAfter = twoDayResultAfter.getTicket();
+        log(twoDayTicketAfter.getDisplayPrice()); // should two day ticket price after tax increase;
+        log(twoDayResultAfter.getChange() + twoDayTicketAfter.getDisplayPrice()); // should be equal to handy money.
+
+        // four day
+        final TicketBuyResult fourDayResultAfter = ticketBoothAfterTaxIncrease.buyPassport(handyMoney, TicketType.FourDay);
+        final Ticket fourDayTicketAfter = fourDayResultAfter.getTicket();
+        log(fourDayTicketAfter.getDisplayPrice()); // should four day ticket price after tax increase;
+        log(fourDayResultAfter.getChange() + fourDayTicketAfter.getDisplayPrice()); // should be equal to handy money.
     }
 }

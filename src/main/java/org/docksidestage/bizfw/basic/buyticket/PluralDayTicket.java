@@ -1,12 +1,15 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
+/**
+ * @author katashin
+ */
 public class PluralDayTicket implements Ticket {
 
-    private int displayPrice;
+    private final int displayPrice;
     // this is also increased by going in park if you have gone out and going in on the same day.
-    private int usableCount;
+    private final int usableCount;
     // this should be synchronize usableCount.
-    private TicketType ticketType;
+    private final TicketType ticketType;
     private int inParkCount;
 
     public PluralDayTicket(int displayPrice, int usableCount, TicketType ticketType) {
@@ -26,6 +29,7 @@ public class PluralDayTicket implements Ticket {
         if (usableCount <= inParkCount) {
             throw new IllegalStateException("This ticket is used over usable count. Can not use to park in.");
         }
+        ++inParkCount;
     }
 
     @Override

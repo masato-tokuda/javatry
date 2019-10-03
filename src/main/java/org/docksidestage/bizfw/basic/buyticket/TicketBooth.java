@@ -15,21 +15,52 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.docksidestage.javatry.basic.TicketBuyResult;
 
 /**
  * @author jflute
+ * @author katashin
  */
 public class TicketBooth {
+
+    private final LocalDateProvider dateProvider;
 
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/1
-    // when 2019/09/30.
-    // after 10/01 it is increased to 13400 because of consumption tax increased.
-    private static final int TWO_DAY_PRICE = 13200;
+
+    // Map<LocalDateRange, Integer> is not suitable...
+    // if Java has Tuple, List<Tuple<LocalDateRange, Integer>> is better.
+    // otherwise creating new class is good option, especially it has verification method of data ranges are not overlapped.
+    // but I have no time for it...
+    private static final Map<TicketType, Map<LocalDateRange, Integer>> priceMap;
+
+    static {
+        priceMap = new HashMap<>();
+        final LocalDate beforeTaxIncrease = LocalDate.of(2019, 9, 30);
+        final LocalDate afterTaxIncrease = beforeTaxIncrease.plusDays(1);
+        final LocalDateRange beforeTaxIncreaseRange = LocalDateRange.of(LocalDate.MIN, beforeTaxIncrease);
+        final LocalDateRange afterTaxIncreaseRange = LocalDateRange.of(afterTaxIncrease, LocalDate.MAX);
+
+        final Map<LocalDateRange, Integer> oneDayTicketPrices = new HashMap<>();
+        oneDayTicketPrices.put(beforeTaxIncreaseRange, 7400);
+        oneDayTicketPrices.put(afterTaxIncreaseRange, 7500);
+        final HashMap<LocalDateRange, Integer> twoDayTicketPrices = new HashMap<>();
+        twoDayTicketPrices.put(beforeTaxIncreaseRange, 13200);
+        twoDayTicketPrices.put(afterTaxIncreaseRange, 13400);
+        final HashMap<LocalDateRange, Integer> fourDayTicketPrices = new HashMap<>();
+        fourDayTicketPrices.put(beforeTaxIncreaseRange, 22400);
+        fourDayTicketPrices.put(afterTaxIncreaseRange, 22800);
+
+        priceMap.put(TicketType.OneDay, oneDayTicketPrices);
+        priceMap.put(TicketType.TwoDay, twoDayTicketPrices);
+        priceMap.put(TicketType.FourDay, fourDayTicketPrices);
+    }
 
     // ===================================================================================
     //                                                                           Attribute
@@ -42,28 +73,34 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public TicketBooth() {
+    public TicketBooth(LocalDateProvider provider) {
+        this.dateProvider = provider;
     }
 
     // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
-    public Ticket buyOneDayPassport(int handedMoney) {
-        buyPassport(handedMoney, ONE_DAY_PRICE);
-        return new OneDayTicket(ONE_DAY_PRICE);
+    public TicketBuyResult buyPassport(int handedMoney, TicketType ticketType) {
+        int price = selectPrice(ticketType, dateProvider.now());
+        Ticket ticket;
+        switch (ticketType) {
+        case OneDay:
+            ticket = new OneDayTicket(price);
+            break;
+        case TwoDay:
+            ticket = new PluralDayTicket(price, 2, TicketType.TwoDay);
+            break;
+        case FourDay:
+            ticket = new PluralDayTicket(price, 4, TicketType.FourDay);
+            break;
+        default:
+            throw new IllegalStateException("Invalid ticketType. ticket type:" + ticketType);
+        }
+        final int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(ticket, change);
     }
 
-    /**
-     * buy two day passport.
-     * @param handedMoney money you handed.
-     * @return change(rest handed money).
-     */
-    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        int change = buyPassport(handedMoney, TWO_DAY_PRICE);
-        return new TicketBuyResult(new PluralDayTicket(TWO_DAY_PRICE, 2, TicketType.TwoDay), change);
-    }
-
-    private int buyPassport(int handedMoney, int price) {
+    private int calculateChange(int handedMoney, int price) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }
@@ -107,5 +144,20 @@ public class TicketBooth {
 
     public Integer getSalesProceeds() {
         return salesProceeds;
+    }
+
+    private int selectPrice(TicketType ticketType, LocalDate date) {
+        // I'd like to use IfPresentOrElse in Java 9....
+        final Map<LocalDateRange, Integer> priceMap = TicketBooth.priceMap.get(ticketType);
+        if (priceMap == null) {
+            throw new IllegalStateException("Invalid ticket type. type:" + ticketType);
+        }
+        return priceMap.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().hasInRange(date))
+                .findFirst()
+                .map(entry -> entry.getValue())
+                .orElseThrow(() -> new IllegalStateException("master date range data is broken..."));
+        // this maybe not request problem, so IllegalStateException is not suitable, I think.
     }
 }

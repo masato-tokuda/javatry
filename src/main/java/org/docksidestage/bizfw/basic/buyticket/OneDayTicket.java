@@ -1,5 +1,8 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
+/**
+ * @author katashin
+ */
 public class OneDayTicket implements Ticket {
 
     // ===================================================================================
