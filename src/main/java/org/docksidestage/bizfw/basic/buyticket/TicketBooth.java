@@ -17,6 +17,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import org.docksidestage.javatry.basic.TicketBuyResult;
 
+// TODO kata authorをよろしくね by jflute (2019/10/03)
 /**
  * @author jflute
  */
@@ -28,12 +29,14 @@ public class TicketBooth {
     private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/1
     // when 2019/09/30.
+    // TODO kata [いいね]これはタイムリーでとてもおもしろい by jflute (2019/10/03)
     // after 10/01 it is increased to 13400 because of consumption tax increased.
     private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
+    // TODO kata [いいね]良いコメント by jflute (2019/10/03)
     // this quantity is common on all kinds of tickets.
     // because this means physical number of paper used to ticket. (maybe...)
     private int quantity = MAX_QUANTITY;

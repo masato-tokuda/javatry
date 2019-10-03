@@ -197,6 +197,8 @@ public class Step02IfForTest extends PlainTestCase {
         // this list is used for side effect in forEach... I don't like it.
         // At first I thought to use StringBuilder append and delete, but it couldn't solve null problem.
         // and break in forEach is too difficult...
+        // TODO kata [ざつだん]良いコメントだね(^^。String[] とか boolean[] を使う回避策もある by jflute (2019/10/03)
+        // 一方で、Listの0と1に意味を付けて使うのであれば、自分であればMapにしちゃうかもね。
         List<String> anotherSea = new ArrayList<>();
         anotherSea.add(null);
         anotherSea.add("FALSE");

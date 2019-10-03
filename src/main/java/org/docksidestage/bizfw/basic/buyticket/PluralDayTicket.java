@@ -2,6 +2,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 public class PluralDayTicket implements Ticket {
 
+    // TODO kata 属性たち、finalが付けられるものには付けてみよう。定義なのか状態なのかがすぐにわかるように by jflute (2019/10/03)
     private int displayPrice;
     // this is also increased by going in park if you have gone out and going in on the same day.
     private int usableCount;
@@ -24,6 +25,7 @@ public class PluralDayTicket implements Ticket {
     @Override
     public void doInPark() {
         if (usableCount <= inParkCount) {
+            // TODO kata countたちを例外メッセージに載せたいかもね by jflute (2019/10/03)
             throw new IllegalStateException("This ticket is used over usable count. Can not use to park in.");
         }
     }

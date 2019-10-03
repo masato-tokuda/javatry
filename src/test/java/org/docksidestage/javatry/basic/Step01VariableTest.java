@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 
 import org.docksidestage.unit.PlainTestCase;
 
+// TODO kata authorよろしくね by jflute (2019/10/03)
 /**
  * The test of variable. <br>
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
