@@ -51,33 +51,31 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
-    public Ticket buyOneDayPassport(int handedMoney) {
-        buyPassport(handedMoney, ONE_DAY_PRICE);
-        return new OneDayTicket(ONE_DAY_PRICE);
+    public TicketBuyResult buyPassport(int handedMoney, TicketType ticketType) {
+        // TODO katashin should be more flexible. by the way, I'd like to use switch formula in Java 11...
+        int price;
+        Ticket ticket;
+        switch (ticketType) {
+        case OneDay:
+            price = ONE_DAY_PRICE;
+            ticket = new OneDayTicket(price);
+            break;
+        case TwoDay:
+            price = TWO_DAY_PRICE;
+            ticket = new PluralDayTicket(price, 2, TicketType.TwoDay);
+            break;
+        case FourDay:
+            price = FOUR_DAY_PRICE;
+            ticket = new PluralDayTicket(price, 4, TicketType.FourDay);
+            break;
+        default:
+            throw new IllegalStateException("Invalid ticketType. ticket type:" + ticketType);
+        }
+        final int change = calculateChange(handedMoney, price);
+        return new TicketBuyResult(ticket, change);
     }
 
-    /**
-     * buy two day passport.
-     * @param handedMoney money you handed.
-     * @return change(rest handed money).
-     */
-    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        int change = buyPassport(handedMoney, TWO_DAY_PRICE);
-        return new TicketBuyResult(new PluralDayTicket(TWO_DAY_PRICE, 2, TicketType.TwoDay), change);
-    }
-
-    /**
-     * buy four day passport.
-     * @param handedMoney money you handed
-     * @return change
-     */
-    // TODO katashin need to refactor. buying method should be aggregated.
-    public TicketBuyResult buyFourDayPassword(int handedMoney) {
-        int change = buyPassport(handedMoney, FOUR_DAY_PRICE);
-        return new TicketBuyResult(new PluralDayTicket(FOUR_DAY_PRICE, 4, TicketType.FourDay), change);
-    }
-
-    private int buyPassport(int handedMoney, int price) {
+    private int calculateChange(int handedMoney, int price) {
         if (quantity <= 0) {
             throw new TicketSoldOutException("Sold out");
         }

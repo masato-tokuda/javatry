@@ -5,11 +5,11 @@ package org.docksidestage.bizfw.basic.buyticket;
  */
 public class PluralDayTicket implements Ticket {
 
-    private int displayPrice;
+    private final int displayPrice;
     // this is also increased by going in park if you have gone out and going in on the same day.
-    private int usableCount;
+    private final int usableCount;
     // this should be synchronize usableCount.
-    private TicketType ticketType;
+    private final TicketType ticketType;
     private int inParkCount;
 
     public PluralDayTicket(int displayPrice, int usableCount, TicketType ticketType) {
