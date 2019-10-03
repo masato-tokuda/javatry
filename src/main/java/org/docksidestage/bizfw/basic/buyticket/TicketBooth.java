@@ -19,6 +19,7 @@ import org.docksidestage.javatry.basic.TicketBuyResult;
 
 /**
  * @author jflute
+ * @author katashin
  */
 public class TicketBooth {
 
